@@ -41,7 +41,7 @@ def create(book_id):
 
 
 @bp.route("/my-reviews")
-@roles_required("user")
+@authenticated_required
 def my_reviews():
     reviews = Review.query.filter_by(user_id=current_user.id).order_by(Review.created_at.desc()).all()
     return render_template("my_reviews.html", reviews=reviews, render_markdown=render_markdown)

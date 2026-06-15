@@ -18,7 +18,7 @@
         <div class="collapse navbar-collapse" id="navbarContent">
             <ul class="navbar-nav me-auto mb-2 mb-lg-0">
                 <li class="nav-item"><a class="nav-link" href="{{ url_for('books.index') }}">Главная</a></li>
-                {% if current_user.is_authenticated and current_user.role_name == 'user' %}
+                {% if current_user.is_authenticated %}
                     <li class="nav-item"><a class="nav-link" href="{{ url_for('reviews.my_reviews') }}">Мои рецензии</a></li>
                 {% endif %}
                 {% if current_user.is_authenticated and current_user.role_name in ['administrator', 'moderator'] %}
