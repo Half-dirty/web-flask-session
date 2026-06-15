@@ -43,8 +43,24 @@ def create(book_id):
 @bp.route("/my-reviews")
 @authenticated_required
 def my_reviews():
-    reviews = Review.query.filter_by(user_id=current_user.id).order_by(Review.created_at.desc()).all()
-    return render_template("my_reviews.html", reviews=reviews, render_markdown=render_markdown)
+    page = request.args.get("page", 1, type=int)
+
+    pagination = Review.query.filter_by(
+        user_id=current_user.id
+    ).order_by(
+        Review.created_at.desc()
+    ).paginate(
+        page=page,
+        per_page=10,
+        error_out=False
+    )
+
+    return render_template(
+        "my_reviews.html",
+        reviews=pagination.items,
+        pagination=pagination,
+        render_markdown=render_markdown
+    )
 
 
 @bp.route("/moderation/reviews")

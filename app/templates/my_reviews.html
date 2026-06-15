@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% from 'macros/pagination.html' import render_pagination %}
 {% block title %}Мои рецензии{% endblock %}
 {% block content %}
 <h1 class="h3 mb-4">Мои рецензии</h1>
@@ -25,6 +26,7 @@
         </tbody>
     </table>
 </div>
+{{ render_pagination(pagination, 'reviews.my_reviews') }}
 {% else %}
 <div class="alert alert-info">Вы ещё не оставляли рецензии</div>
 {% endif %}
