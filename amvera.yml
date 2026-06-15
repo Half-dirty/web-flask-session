@@ -1,0 +1,10 @@
+meta:
+  environment: python
+  toolchain:
+    name: pip
+    version: 3.12
+
+run:
+  command: python init_db_once.py && gunicorn --bind 0.0.0.0:5000 wsgi:app
+  containerPort: 5000
+  persistenceMount: /data

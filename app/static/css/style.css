@@ -1,0 +1,23 @@
+body {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+}
+
+main {
+    flex: 1;
+}
+
+.cover-image {
+    max-height: 520px;
+    object-fit: cover;
+    width: 100%;
+}
+
+.markdown-content p:last-child {
+    margin-bottom: 0;
+}
+
+.review-cell {
+    max-width: 520px;
+}

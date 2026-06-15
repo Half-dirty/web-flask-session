@@ -1,0 +1,9 @@
+{% extends 'base.html' %}
+{% from 'macros/book_form.html' import render_book_form %}
+{% block title %}{{ 'Добавление книги' if action == 'create' else 'Редактирование книги' }}{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">{{ 'Добавление книги' if action == 'create' else 'Редактирование книги' }}</h1>
+<form method="post" enctype="multipart/form-data">
+    {{ render_book_form(book, genres, selected_genres, action) }}
+</form>
+{% endblock %}

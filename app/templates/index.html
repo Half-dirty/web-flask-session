@@ -1,0 +1,69 @@
+{% extends 'base.html' %}
+{% from 'macros/pagination.html' import render_pagination %}
+{% block title %}Главная{% endblock %}
+{% block content %}
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <h1 class="h3 mb-0">Книги</h1>
+    {% if current_user.is_authenticated and current_user.role_name == 'administrator' %}
+        <a class="btn btn-success" href="{{ url_for('books.create') }}">Добавить книгу</a>
+    {% endif %}
+</div>
+{% if books %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>Название</th>
+            <th>Жанры</th>
+            <th>Год</th>
+            <th>Средняя оценка</th>
+            <th>Рецензии</th>
+            <th class="text-end">Действия</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.title }}</td>
+                <td>{{ book.genres | map(attribute='name') | join(', ') }}</td>
+                <td>{{ book.publication_year }}</td>
+                <td>{{ book.average_rating if book.average_rating is not none else 'Нет оценок' }}</td>
+                <td>{{ book.approved_reviews_count }}</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-outline-primary" href="{{ url_for('books.show', book_id=book.id) }}">Просмотр</a>
+                    {% if current_user.is_authenticated and current_user.role_name in ['administrator', 'moderator'] %}
+                        <a class="btn btn-sm btn-outline-secondary" href="{{ url_for('books.edit', book_id=book.id) }}">Редактировать</a>
+                    {% endif %}
+                    {% if current_user.is_authenticated and current_user.role_name == 'administrator' %}
+                        <button class="btn btn-sm btn-outline-danger" data-bs-toggle="modal" data-bs-target="#deleteBook{{ book.id }}">Удалить</button>
+                        <div class="modal fade text-start" id="deleteBook{{ book.id }}" tabindex="-1" aria-hidden="true">
+                            <div class="modal-dialog">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title">Удаление книги</h5>
+                                        <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Вы уверены, что хотите удалить книгу {{ book.title }}?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Нет</button>
+                                        <form method="post" action="{{ url_for('books.delete', book_id=book.id) }}">
+                                            <button class="btn btn-danger" type="submit">Да</button>
+                                        </form>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{ render_pagination(pagination, 'books.index') }}
+{% else %}
+<div class="alert alert-info">Книги не найдены</div>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,35 @@
+{% extends 'base.html' %}
+{% from 'macros/pagination.html' import render_pagination %}
+{% block title %}Модерация рецензий{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">Модерация рецензий</h1>
+{% if reviews %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>Книга</th>
+            <th>Пользователь</th>
+            <th>Дата добавления</th>
+            <th class="text-end">Действие</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+            <tr>
+                <td>{{ review.book.title }}</td>
+                <td>{{ review.user.full_name }}</td>
+                <td>{{ review.created_at.strftime('%d.%m.%Y %H:%M') }}</td>
+                <td class="text-end">
+                    <a class="btn btn-sm btn-primary" href="{{ url_for('reviews.moderation_show', review_id=review.id) }}">Рассмотреть</a>
+                </td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{{ render_pagination(pagination, 'reviews.moderation_list') }}
+{% else %}
+<div class="alert alert-info">Рецензий на рассмотрении нет</div>
+{% endif %}
+{% endblock %}

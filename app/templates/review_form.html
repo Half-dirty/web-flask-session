@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+{% block title %}Новая рецензия{% endblock %}
+{% block content %}
+<h1 class="h3 mb-2">Новая рецензия</h1>
+<div class="text-muted mb-4">{{ book.title }}</div>
+<form method="post" class="card card-body shadow-sm">
+    <div class="mb-3">
+        <label class="form-label" for="rating">Оценка</label>
+        <select class="form-select" id="rating" name="rating">
+            {% for value, title in rating_options %}
+                <option value="{{ value }}" {% if value|string == selected_rating|string %}selected{% endif %}>{{ title }}</option>
+            {% endfor %}
+        </select>
+    </div>
+    <div class="mb-3">
+        <label class="form-label" for="text">Текст рецензии</label>
+        <textarea class="form-control markdown-editor" id="text" name="text" rows="8" required>{{ text }}</textarea>
+    </div>
+    <div class="d-flex gap-2">
+        <button class="btn btn-primary" type="submit">Сохранить</button>
+        <a class="btn btn-outline-secondary" href="{{ url_for('books.show', book_id=book.id) }}">Отмена</a>
+    </div>
+</form>
+{% endblock %}

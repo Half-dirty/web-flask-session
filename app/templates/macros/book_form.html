@@ -1,0 +1,46 @@
+{% macro render_book_form(book, genres, selected_genres, action) %}
+<div class="mb-3">
+    <label class="form-label" for="title">Название</label>
+    <input class="form-control" id="title" name="title" value="{{ book.title if book else '' }}" required>
+</div>
+<div class="mb-3">
+    <label class="form-label" for="short_description">Краткое описание</label>
+    <textarea class="form-control markdown-editor" id="short_description" name="short_description" rows="7" required>{{ book.short_description if book else '' }}</textarea>
+</div>
+<div class="row">
+    <div class="col-md-4 mb-3">
+        <label class="form-label" for="publication_year">Год</label>
+        <input class="form-control" id="publication_year" name="publication_year" type="number" min="1" max="9999" value="{{ book.publication_year if book else '' }}" required>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label class="form-label" for="publisher">Издательство</label>
+        <input class="form-control" id="publisher" name="publisher" value="{{ book.publisher if book else '' }}" required>
+    </div>
+    <div class="col-md-4 mb-3">
+        <label class="form-label" for="page_count">Объём в страницах</label>
+        <input class="form-control" id="page_count" name="page_count" type="number" min="1" value="{{ book.page_count if book else '' }}" required>
+    </div>
+</div>
+<div class="mb-3">
+    <label class="form-label" for="author">Автор</label>
+    <input class="form-control" id="author" name="author" value="{{ book.author if book else '' }}" required>
+</div>
+<div class="mb-3">
+    <label class="form-label" for="genres">Жанры</label>
+    <select class="form-select" id="genres" name="genres" multiple required>
+        {% for genre in genres %}
+            <option value="{{ genre.id }}" {% if genre.id in selected_genres %}selected{% endif %}>{{ genre.name }}</option>
+        {% endfor %}
+    </select>
+</div>
+{% if action == 'create' %}
+<div class="mb-3">
+    <label class="form-label" for="cover">Обложка</label>
+    <input class="form-control" id="cover" name="cover" type="file" accept="image/*" required>
+</div>
+{% endif %}
+<div class="d-flex gap-2">
+    <button class="btn btn-primary" type="submit">Сохранить</button>
+    <a class="btn btn-outline-secondary" href="{{ url_for('books.index') }}">Отмена</a>
+</div>
+{% endmacro %}

@@ -1,0 +1,31 @@
+{% extends 'base.html' %}
+{% block title %}Мои рецензии{% endblock %}
+{% block content %}
+<h1 class="h3 mb-4">Мои рецензии</h1>
+{% if reviews %}
+<div class="table-responsive">
+    <table class="table table-hover align-middle">
+        <thead>
+        <tr>
+            <th>Статус</th>
+            <th>Книга</th>
+            <th>Оценка</th>
+            <th>Текст</th>
+        </tr>
+        </thead>
+        <tbody>
+        {% for review in reviews %}
+            <tr>
+                <td>{{ review.status.title }}</td>
+                <td><a href="{{ url_for('books.show', book_id=review.book.id) }}">{{ review.book.title }}</a></td>
+                <td>{{ review.rating }}</td>
+                <td class="review-cell">{{ render_markdown(review.text) | safe }}</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-info">Вы ещё не оставляли рецензии</div>
+{% endif %}
+{% endblock %}
